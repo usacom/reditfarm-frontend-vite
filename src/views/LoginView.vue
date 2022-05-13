@@ -23,12 +23,11 @@ export default {
     ElCol,
   },
   setup() {
-    const mainStore = useMainStore();
+    // const mainStore = useMainStore();
     const userStore = useUserStore();
     return {
       username: userStore.username,
       isLogined: userStore.isLogined,
-      menu: mainStore.menu,
       userStore,
     };
   },

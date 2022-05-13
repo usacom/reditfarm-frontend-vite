@@ -28,7 +28,7 @@ export default {
     return {
       username: userStore.username,
       isLogined: userStore.isLogined,
-      menu: mainStore.menu,
+      loading: mainStore.loading,
       userStore,
     };
   },
@@ -154,7 +154,7 @@ export default {
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleFormRef')">
+          <el-button v-loading.fullscreen.lock="loading" type="primary" @click="submitForm('ruleFormRef')">
             Register
           </el-button>
           <el-button @click="resetForm('ruleFormRef')">Clear</el-button>

@@ -40,12 +40,10 @@ export default {
     DocumentAdd,
   },
   setup() {
-    const mainStore = useMainStore();
     const userStore = useUserStore();
     const isDark = useDark();
     const toggleDark = useToggle(isDark);
     return {
-      menu: mainStore.menu,
       userStore,
       isDark,
       toggleDark,
@@ -55,6 +53,7 @@ export default {
   },
   computed: {
     ...mapState(useUserStore, ["username", "isLogined"]),
+    ...mapState(useMainStore, ["loading", "menu"]),
     projectName() {
       return import.meta.env.VITE_APP_BASE_TITLE;
     },
@@ -74,10 +73,10 @@ export default {
 };
 </script>
 <template>
-  <el-container class="layout-container-base" style="height: 100vh">
+  <el-container v-loading.fullscreen.lock="loading" class="layout-container-base" style="height: 100vh">
     <el-aside width="200px">
       <el-scrollbar>
-        <el-menu router>
+        <el-menu router :collapse="false">
           <el-menu-item index="0" :route="{ name: 'home' }">
             <template #title>
               <el-icon>

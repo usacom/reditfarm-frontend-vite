@@ -3,6 +3,8 @@ import { defineStore } from "pinia";
 import API from "../utils/api";
 import { Result } from "../utils/Result";
 
+import { useMainStore } from './main'
+
 const api = new API(import.meta.env.VITE_APP_API_PATH);
 
 export const useUserStore = defineStore("user", {
@@ -33,17 +35,20 @@ export const useUserStore = defineStore("user", {
     async authByReddit() {
       try {
         const login = (await api.loginLink()).data;
-        console.log(login);
         window.open(login, "_self");
       } catch (e) {
         console.log(e);
       }
     },
     async registerUser(code, password) {
+      const main = useMainStore()
+      main.startLoading();
       try {
         const responce = await api.siginUp({ password, code });
+        main.endLoading();
         return Result.ok(responce.data.username);
       } catch (e) {
+        main.endLoading();
         console.log(e);
         if (e.response.status === 400 && e.response.data.detail) {
           return Result.error(new Error(e.response.data.detail));
@@ -52,6 +57,8 @@ export const useUserStore = defineStore("user", {
       }
     },
     async loginUser(username, password) {
+      const main = useMainStore()
+      main.startLoading();
       try {
         const params = {
           username,
@@ -64,10 +71,13 @@ export const useUserStore = defineStore("user", {
             Authorization: authToken,
             Accept: "application/json",
           });
+          main.endLoading();
           return Result.ok(true);
         }
+        main.endLoading();
         return Result.ok(true);
       } catch (e) {
+        main.endLoading();
         return Result.error(new Error("Something wrong."));
       }
     },
