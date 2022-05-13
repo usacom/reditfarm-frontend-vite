@@ -35,30 +35,35 @@ export default {
   data() {
     return {
       form: {
-        login: "",
         password: "",
+        checkPassword: "",
       },
     };
   },
   computed: {
+    authCode() {
+      return this.$route.query.code;
+    },
     rules() {
       return {
-        login: [{ validator: this.validateLogin, trigger: "blur" }],
         password: [{ validator: this.validatePass, trigger: "blur" }],
+        checkPassword: [{ validator: this.checkPassword, trigger: "blur" }],
       };
     },
   },
   methods: {
-    validateLogin(rule, value, callback) {
+    validatePass(rule, value, callback) {
       if (value === "") {
-        callback(new Error("Please input the login"));
+        callback(new Error("Please input the password"));
       } else {
         callback();
       }
     },
-    validatePass(rule, value, callback) {
+    checkPassword(rule, value, callback) {
       if (value === "") {
         callback(new Error("Please input the password"));
+      } else if (value !== this.form.password) {
+        callback(new Error("Password not same"));
       } else {
         callback();
       }
@@ -69,7 +74,7 @@ export default {
       formEl.validate((valid) => {
         if (valid) {
           console.log("submit!");
-          this.startLogin();
+          this.startReg();
         } else {
           console.log("error submit!");
           return false;
@@ -81,9 +86,27 @@ export default {
       if (!formEl) return;
       formEl.resetFields();
     },
-    async startLogin() {
+    async startReg() {
+      const result = await this.userStore.registerUser(
+        this.authCode,
+        this.form.password
+      );
+      result
+        .ok((username) => {
+          this.startLogin(username);
+        })
+        .error((error) => {
+          console.log("startReg", error);
+          ElNotification({
+            title: "Error",
+            message: error,
+            type: "error",
+          });
+        });
+    },
+    async startLogin(username) {
       const result = await this.userStore.loginUser(
-        this.form.login,
+        username,
         this.form.password
       );
       result
@@ -107,7 +130,7 @@ export default {
 <template>
   <el-row :gutter="20">
     <el-col :span="12" :offset="6">
-      <h1>Login page</h1>
+      <h1>Register page</h1>
       <el-form
         ref="ruleFormRef"
         :model="form"
@@ -116,9 +139,6 @@ export default {
         label-width="120px"
         class="demo-ruleForm"
       >
-        <el-form-item label="Login" prop="login">
-          <el-input v-model="form.login" type="login" autocomplete="off" />
-        </el-form-item>
         <el-form-item label="Password" prop="password">
           <el-input
             v-model="form.password"
@@ -126,9 +146,16 @@ export default {
             autocomplete="off"
           />
         </el-form-item>
+        <el-form-item label="Repat password" prop="checkPassword">
+          <el-input
+            v-model="form.checkPassword"
+            type="password"
+            autocomplete="off"
+          />
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('ruleFormRef')">
-            Login
+            Register
           </el-button>
           <el-button @click="resetForm('ruleFormRef')">Clear</el-button>
         </el-form-item>

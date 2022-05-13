@@ -9,6 +9,7 @@ export const useMainStore = defineStore("main", {
       count: 0,
       name: "Eduardo",
       menu: true,
+      loading: false,
     };
   },
   getters: {

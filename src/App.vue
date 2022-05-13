@@ -60,6 +60,9 @@ export default {
     },
   },
   methods: {
+    register() {
+      this.userStore.authByReddit();
+    },
     logout() {
       this.userStore.logout();
       this.$router.go("/");
@@ -122,8 +125,11 @@ export default {
             inline-prompt
             :active-icon="Moon"
             :inactive-icon="Sunny"
-            style="margin: 0 5px"
+            style="margin: 0 12px"
           />
+          <el-button v-if="!isLogined" @click="register" type="primary" plain>
+            Registration
+          </el-button>
           <router-link
             v-if="!isLogined"
             to="/login"

@@ -3,12 +3,14 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/views/HomeView.vue";
 import AboutView from "@/views/AboutView.vue";
 import LoginView from "@/views/LoginView.vue";
+import RegisterView from "@/views/RegisterView.vue";
 import PostsView from "@/views/PostsView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 
 import { useUserStore } from "@/stores/user";
 import auth from "./middleware/auth";
 import guest from "./middleware/guest";
+import register from "./middleware/register";
 import middlewarePipeline from "./middlewarePipeline";
 const routes = [
   {
@@ -17,6 +19,7 @@ const routes = [
     component: HomeView,
     meta: {
       title: "Home",
+      middleware: [register],
     },
   },
   {
@@ -70,6 +73,15 @@ const routes = [
     meta: {
       title: "Login page",
       middleware: [guest],
+    },
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: RegisterView,
+    meta: {
+      title: "Register page",
+      middleware: [register],
     },
   },
 ];
