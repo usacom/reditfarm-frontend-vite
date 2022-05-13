@@ -30,7 +30,31 @@ export const useUserStore = defineStore("user", {
   },
   actions: {
     async registerUser(username, password) {},
-    async loginUser(username, password) {},
+    async loginUser(username, password) {
+      try {
+        const params = {
+          username,
+          password,
+        };
+        const response = await api.getToken(params);
+        if (response.data.token_type === "bearer") {
+          const authToken = `Bearer ${response.data.access_token}`;
+          api.setHeaders({
+            Authorization: authToken,
+            Accept: "application/json",
+          });
+          return true;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+      return false;
+    },
+    logout(){
+      if (this.isLogined) {
+        api.setHeaders({ Authorization: '', Accept: 'application/json' });
+      }
+    },
     async loadLoginData() {
       try {
         const response = await api.tokenStatus();
