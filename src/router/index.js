@@ -5,6 +5,8 @@ import AboutView from "@/views/AboutView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import PostsView from "@/views/PostsView.vue";
+import PostCreateView from "@/views/PostCreateView.vue";
+import PostsScheduledView from "@/views/PostsScheduledView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 
 import { useUserStore } from "@/stores/user";
@@ -42,7 +44,7 @@ const routes = [
   {
     path: "/post/scheduled",
     name: "postsScheduled",
-    component: PostsView,
+    component: PostsScheduledView,
     meta: {
       title: "Post scheduled",
       middleware: [auth],
@@ -51,7 +53,7 @@ const routes = [
   {
     path: "/post/create",
     name: "postCreate",
-    component: PostsView,
+    component: PostCreateView,
     meta: {
       title: "Create post",
       middleware: [auth],

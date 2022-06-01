@@ -92,7 +92,6 @@ export default {
           }
         })
         .error((error) => {
-          console.log("startLogin", error);
           ElNotification({
             title: "Error",
             message: error,

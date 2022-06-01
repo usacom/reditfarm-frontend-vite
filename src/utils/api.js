@@ -73,10 +73,9 @@ class API {
     return this.POST('post/subreddits-info/', subreddits, false);
   }
 
-  createPosts(posts, type = 'SCHEDULED') {
+  createPosts(posts) {
     const postsDTO = posts.map((post) => ({
       url: '',
-      status: type, // SAVED or SCHEDULED
       scheduled_time: post.timePost,
       nsfw: true,
       spoiler: true,

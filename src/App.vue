@@ -172,6 +172,9 @@ body {
   text-align: center;
   color: var(--el-text-color-primary);
 }
+.el-popover {
+  --el-popover-bg-color: var(--el-bg-color) !important;
+}
 </style>
 <style scoped>
 .layout-container-base .el-header {
